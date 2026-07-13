@@ -12,15 +12,15 @@ Afin de concevoir notre premier modèle, il est impératif d’avoir à notre di
 
 Une fois le dataset téléchargé sous forme de zip, au nom ‘archive.zip’, décompresser le fichier et l’ouvrir pour en dévoiler l’intérieur :
 
-![Dossier archive.zip décompressé du dataset GTSRB](images/Capture_decran_2026-06-30_a_14.51.17.png)
+![Dossier archive.zip décompressé du dataset GTSRB](images/imA)
 
 Dans le dossier “Meta” se trouvent les différents panneaux et leur numérotation dans cette database, par exemple le panneau numéroté 1 est celui de la signalisation d’une vitesse limitée à 30 km/h, le panneau stop est le numéro 14, etc. 
 
-![Contenu du dossier Meta avec la numérotation des panneaux](images/Capture_decran_2026-06-30_a_15.01.53.png)
+![Contenu du dossier Meta avec la numérotation des panneaux](images/imB)
 
 Le dossier « Train », quant à lui, contient toutes les images qui serviront à entrainer le modèle. Celles-ci sont rangées par id des panneaux (comme énoncé précédemment, le numéro 14 pour le panneau stop par exemple). C’est ce dossier qui va nous servir pour concevoir notre dataset et entraîner notre modèle. 
 
-!![Contenu du dossier Train classé par ID de panneaux](images/Capture_decran_2026-06-30_a_15.01.03.png)
+!![Contenu du dossier Train classé par ID de panneaux](images/imC)
 
 Enfin, le dossier ‘Test’ ne nous servira pas ici, mais il peut être utile dans d’autres contextes pour avoir un dataset pour la phase de test du modèle, pour tirer des conclusions sur son fonctionnement. 
 
@@ -40,19 +40,19 @@ Quelques exemples ci-dessous (une photo sombre, une de près, une penchée) :
 
 Après avoir créé un compte sur : https://roboflow.com/ Aller dans l’onglet dédié aux projets, puis cliquer sur new project (ou + Project).
 
-![Création d'un nouveau projet sur l'interface Roboflow](images/Capture_decran_2026-06-30_a_15.17.11.png)
+![Création d'un nouveau projet sur l'interface Roboflow](images/imD)
 
 La page suivante s’ouvrira, dans laquelle, sous la partie “Project Type”, sélectionnez Object Detection, puis appuyez sur create public project. 
 
-![Sélection du type de projet Object Detection sur Roboflow](images/Capture_decran_2026-06-30_a_15.17.41.png)
+![Sélection du type de projet Object Detection sur Roboflow](images/imE)
 
-![Paramétrage final de la création du projet Roboflow](images/Capture_decran_2026-06-30_a_15.18.12.png)
+![Paramétrage final de la création du projet Roboflow](images/imF)
 
 Importez toutes les images qui nous intéressent (environ 300 images du dataset GTSRB par type de panneau + vos images "faites maison"), puis cliquez sur **Save and continue**. À la question *How do you want to label your images*, sélectionnez **Label Myself**. (L'option d'auto-étiquetage existe, mais l'annotation manuelle reste la plus fiable pour démarrer). Sur la page suivante, il faudra donc annoter à la main chacune des images, c’est-à-dire dessiner un carré autour du panneau, et indiquer sa classe. “Save” puis répéter pour chacun des panneaux.
 
-![Interface d'annotation manuelle avec Bounding Box sur Roboflow](images/Capture_decran_2026-06-30_a_15.29.26.png)
+![Interface d'annotation manuelle avec Bounding Box sur Roboflow](images/imG)
 
-![Aperçu d'une image correctement annotée sur Roboflow](images/Capture_decran_2026-06-30_a_15.30.33.png)
+![Aperçu d'une image correctement annotée sur Roboflow](images/imH)
 
 Cliquez ensuite sur **Download Dataset**, sélectionnez le format **YOLOv8** et choisissez l'option **Show download code**. Copiez ce code de téléchargement, nous en aurons besoin pour l'étape suivante.
 
@@ -139,7 +139,7 @@ La solution consiste à utiliser la mémoire morte de la caméra (ROMFS) et la t
 → Une fenêtre s’ouvre : cliquez sur Ajouter un fichier (deuxième bouton en partant de la gauche en bas de la page) et sélectionnez le fichier network_hybride.tflite généré à l’étape 1 (vous remarquez que se trouve sur cette page tous les modèles exemples crées par l’entreprise)
 → Enfin, cliquez sur “Commettre” (ou Commit le bouton bleu). C’est cette action qui grave physiquement le modèle dans la mémoire Flash de la caméra. 
 
-![Bouton pour commettre le fichier tflite dans la ROMFS d'OpenMV IDE](images/Capture_decran_2026-07-06_a_12.59.35.png)
+![Bouton pour commettre le fichier tflite dans la ROMFS d'OpenMV IDE](images/imI)
 
 # Étape 3 : Programmation et test de la caméra (MicroPython)
 
@@ -163,9 +163,9 @@ Notre modèle d’IA renvoie ses résultats sous la forme de matrices (des liste
 
 La caméra peut voir plusieurs panneaux en même temps. S’il y a un vrai panneau “STOP” au premier plan (sûr à 90 %), et un panneau un peu plus loin, qui n’est sûr qu’à 80 %, la caméra ne doit pas envoyer deux ordres contradictoires au robot. La boucle principale compare les scores et ne retient que le meilleur candidat à chaque image avant d’attribuer la lettre correspondante (V pour 30 km/h, I pour Interdit, S pour STOP).
 
-![Logique de décision multiclasse](images/Capture_decran_2026-07-06_a_16.07.39.png)
+![Logique de décision multiclasse](images/imJ.png)
 
-![Sélection du meilleur score de confiance](images/Capture_decran_2026-07-06_a_16.08.22.png)
+![Sélection du meilleur score de confiance](images/imK.png)
 
 ![Rendu en direct de la détection sur le flux vidéo de l'OpenMV](images/photo_detection_1.png)
 
