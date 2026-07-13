@@ -1,8 +1,8 @@
-# 🚦 Projet YouthAILab : Détection de Panneaux (N6Cam & Robot STeaMi)
+# 🚦 Projet RobotIA : Détection de Panneaux (N6Cam & Robot STeaMi)
 
 Bienvenue sur le dépôt officiel du projet de conduite autonome par vision pour le robot 4x4 STeaMi. 
 
-Ce projet a été conçu pour les ateliers pédagogiques du YouthAILab. Il permet à un robot d'analyser son environnement en temps réel grâce à une intelligence artificielle embarquée (YOLOv8) et de réagir de manière autonome aux panneaux de signalisation routière.
+Ce projet permet à un robot d'analyser son environnement en temps réel grâce à une intelligence artificielle embarquée (YOLOv8) et de réagir de manière autonome aux panneaux de signalisation routière.
 
 ## 🎯 Résumé du Fonctionnement
 1. **Vision :** Une caméra N6Cam (écosystème OpenMV) embarque un modèle IA entraîné sur mesure.
@@ -18,22 +18,20 @@ Pour reproduire ce projet, vous aurez besoin de :
 
 ## 📂 Navigation dans ce dépôt (Où trouver quoi ?)
 
-Ce dépôt est structuré pour répondre aux besoins des développeurs comme des animateurs d'ateliers :
+Ce dépôt est structuré pour une prise en main rapide et une séparation claire entre le code, l'IA et la documentation :
 
-* 📁 **[1_Guide_Deploiement](./1_Guide_Deploiement/)** : Contient le guide complet pas-à-pas (PDF) expliquant toute la démarche technique, de l'entraînement de l'IA jusqu'au code final. **C'est le document à lire en priorité si vous souhaitez reproduire le projet.**
-* 📁 **[2_Codes_Sources](./2_Codes_Sources/)** :
-  * `Camera_MicroPython` : Le script `main.py` à flasher sur la caméra.
-  * `Robot_Arduino` : Le code source C++ complet pour la carte STeaMi.
-  * `Modele_IA_Colab` : Le Notebook Google Colab d'entraînement YOLOv8 et le modèle `.tflite` pré-compilé.
-* 📁 **[3_Ressources_Pedagogiques](./3_Ressources_Pedagogiques/)** : Contient les outils pour les animateurs (Fiche mémo de démarrage, schéma de câblage, explication des codes couleurs LED).
+* 📁 **[docs/](./docs/)** : Contient le guide complet de déploiement technique et les ressources pédagogiques annexes. **C'est le dossier à consulter en priorité pour reproduire ou animer le projet.**
+* 📁 **[src/](./src/)** :
+  * `openmv_camera/` : Le script `main.py` en MicroPython à flasher sur la caméra.
+  * `steami_arduino/` : Le code source C++ complet (`.ino`) pour la carte STeaMi.
+* 📁 **[models/](./models/)** :
+  * Le modèle `.tflite` (Quantification hybride : Entrée INT8 / Sortie FLOAT32) prêt à être déployé.
+  * Le Notebook Google Colab (`yolov8_training.ipynb`) pour ré-entraîner ou adapter l'IA avec de nouveaux panneaux.
 
 ## 🚀 Démarrage Rapide (Quick Start)
-1. Téléchargez le fichier `network_hybride.tflite` situé dans le dossier `2_Codes_Sources`.
+1. Téléchargez le fichier `network_hybride.tflite` situé dans le dossier `models/`.
 2. Flashez ce fichier dans la mémoire **ROMFS** de la caméra via OpenMV IDE.
-3. Déposez le fichier `main.py` sur la caméra.
-4. Téléversez le code Arduino sur le robot STeaMi.
+3. Déposez le fichier `main.py` (issu du dossier `src/openmv_camera/`) sur la caméra.
+4. Téléversez le code Arduino (issu du dossier `src/steami_arduino/`) sur le robot STeaMi.
 5. Connectez la broche `P4` et le `GND` de la caméra au port Jacdac du robot.
 6. Allumez le robot et placez un panneau devant la caméra !
-
----
-*Projet réalisé dans le cadre du développement des activités pédagogiques du YouthAILab - 2026.*
