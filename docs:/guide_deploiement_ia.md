@@ -12,15 +12,15 @@ Afin de concevoir notre premier modèle, il est impératif d’avoir à notre di
 
 Une fois le dataset téléchargé sous forme de zip, au nom ‘archive.zip’, décompresser le fichier et l’ouvrir pour en dévoiler l’intérieur :
 
-![Capture d’écran 2026-06-30 à 14.51.17.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/Capture_decran_2026-06-30_a_14.51.17.png)
+![Dossier archive.zip décompressé du dataset GTSRB](images/Capture_decran_2026-06-30_a_14.51.17.png)
 
 Dans le dossier “Meta” se trouvent les différents panneaux et leur numérotation dans cette database, par exemple le panneau numéroté 1 est celui de la signalisation d’une vitesse limitée à 30 km/h, le panneau stop est le numéro 14, etc. 
 
-![Capture d’écran 2026-06-30 à 15.01.53.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/Capture_decran_2026-06-30_a_15.01.53.png)
+![Contenu du dossier Meta avec la numérotation des panneaux](images/Capture_decran_2026-06-30_a_15.01.53.png)
 
 Le dossier « Train », quant à lui, contient toutes les images qui serviront à entrainer le modèle. Celles-ci sont rangées par id des panneaux (comme énoncé précédemment, le numéro 14 pour le panneau stop par exemple). C’est ce dossier qui va nous servir pour concevoir notre dataset et entraîner notre modèle. 
 
-![Capture d’écran 2026-06-30 à 15.01.03.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/Capture_decran_2026-06-30_a_15.01.03.png)
+!![Contenu du dossier Train classé par ID de panneaux](images/Capture_decran_2026-06-30_a_15.01.03.png)
 
 Enfin, le dossier ‘Test’ ne nous servira pas ici, mais il peut être utile dans d’autres contextes pour avoir un dataset pour la phase de test du modèle, pour tirer des conclusions sur son fonctionnement. 
 
@@ -30,29 +30,29 @@ Il est fortement conseillé de prendre des photos additionnelles dans le context
 
 Quelques exemples ci-dessous (une photo sombre, une de près, une penchée) :
 
-![IMG_3648.jpeg](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/IMG_3648.jpeg)
+![Exemple de photo situationnelle dans un environnement sombre](images/IMG_3648.jpeg)
 
-![IMG_3666.jpeg](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/IMG_3666.jpeg)
+![Exemple de photo situationnelle prise de près](images/IMG_3666.jpeg)
 
-![IMG_3633.jpeg](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/IMG_3633.jpeg)
+![Exemple de photo situationnelle avec la caméra penchée](images/IMG_3633.jpeg)
 
 ### 1.1.3 Préparation sur Roboflow
 
 Après avoir créé un compte sur : https://roboflow.com/ Aller dans l’onglet dédié aux projets, puis cliquer sur new project (ou + Project).
 
-![Capture d’écran 2026-06-30 à 15.17.11.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/Capture_decran_2026-06-30_a_15.17.11.png)
+![Création d'un nouveau projet sur l'interface Roboflow](images/Capture_decran_2026-06-30_a_15.17.11.png)
 
 La page suivante s’ouvrira, dans laquelle, sous la partie “Project Type”, sélectionnez Object Detection, puis appuyez sur create public project. 
 
-![Capture d’écran 2026-06-30 à 15.17.41.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/Capture_decran_2026-06-30_a_15.17.41.png)
+![Sélection du type de projet Object Detection sur Roboflow](images/Capture_decran_2026-06-30_a_15.17.41.png)
 
-![Capture d’écran 2026-06-30 à 15.18.12.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/Capture_decran_2026-06-30_a_15.18.12.png)
+![Paramétrage final de la création du projet Roboflow](images/Capture_decran_2026-06-30_a_15.18.12.png)
 
 Importez toutes les images qui nous intéressent (environ 300 images du dataset GTSRB par type de panneau + vos images "faites maison"), puis cliquez sur **Save and continue**. À la question *How do you want to label your images*, sélectionnez **Label Myself**. (L'option d'auto-étiquetage existe, mais l'annotation manuelle reste la plus fiable pour démarrer). Sur la page suivante, il faudra donc annoter à la main chacune des images, c’est-à-dire dessiner un carré autour du panneau, et indiquer sa classe. “Save” puis répéter pour chacun des panneaux.
 
-![Capture d’écran 2026-06-30 à 15.29.26.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/Capture_decran_2026-06-30_a_15.29.26.png)
+![Interface d'annotation manuelle avec Bounding Box sur Roboflow](images/Capture_decran_2026-06-30_a_15.29.26.png)
 
-![Capture d’écran 2026-06-30 à 15.30.33.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/Capture_decran_2026-06-30_a_15.30.33.png)
+![Aperçu d'une image correctement annotée sur Roboflow](images/Capture_decran_2026-06-30_a_15.30.33.png)
 
 Cliquez ensuite sur **Download Dataset**, sélectionnez le format **YOLOv8** et choisissez l'option **Show download code**. Copiez ce code de téléchargement, nous en aurons besoin pour l'étape suivante.
 
@@ -91,15 +91,15 @@ Une fois les 100 époques terminées, le code génère automatiquement plusieurs
 
 **Les courbes d'apprentissage (Loss & mAP) :** Le script affiche un graphique d'évolution (`results.png`). La courbe "Loss" (les erreurs) doit descendre, tandis que la courbe "mAP" (la précision) doit monter.
 
-![image.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/image.png)
+![Graphiques des courbes d'apprentissage Loss et mAP générés par Colab](images/image.png)
 
 **La Matrice de Confusion :** Générée via `confusion_matrix.png`, cette grille permet de voir exactement où le modèle hésite
 
-![image.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/image%201.png)
+![Matrice de confusion du modèle YOLOv8](images/image2.png)
 
 **Validation visuelle directe :** Le notebook trace ses propres prédictions (`val_batch0_pred.jpg`) sur un échantillon d'images pour nous montrer les *Bounding Boxes* et les pourcentages de confiance générés.
 
-![image.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/image%202.png)
+![Aperçu des prédictions visuelles avec boîtes et pourcentages de confiance](images/image3.png)
 
 ### 1.2.2 Spécifications liées à la N6Cam
 
@@ -139,7 +139,7 @@ La solution consiste à utiliser la mémoire morte de la caméra (ROMFS) et la t
 → Une fenêtre s’ouvre : cliquez sur Ajouter un fichier (deuxième bouton en partant de la gauche en bas de la page) et sélectionnez le fichier network_hybride.tflite généré à l’étape 1 (vous remarquez que se trouve sur cette page tous les modèles exemples crées par l’entreprise)
 → Enfin, cliquez sur “Commettre” (ou Commit le bouton bleu). C’est cette action qui grave physiquement le modèle dans la mémoire Flash de la caméra. 
 
-![Capture d’écran 2026-07-06 à 12.59.35.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/Capture_decran_2026-07-06_a_12.59.35.png)
+![Bouton pour commettre le fichier tflite dans la ROMFS d'OpenMV IDE](images/Capture_decran_2026-07-06_a_12.59.35.png)
 
 # Étape 3 : Programmation et test de la caméra (MicroPython)
 
@@ -163,11 +163,11 @@ Notre modèle d’IA renvoie ses résultats sous la forme de matrices (des liste
 
 La caméra peut voir plusieurs panneaux en même temps. S’il y a un vrai panneau “STOP” au premier plan (sûr à 90 %), et un panneau un peu plus loin, qui n’est sûr qu’à 80 %, la caméra ne doit pas envoyer deux ordres contradictoires au robot. La boucle principale compare les scores et ne retient que le meilleur candidat à chaque image avant d’attribuer la lettre correspondante (V pour 30 km/h, I pour Interdit, S pour STOP).
 
-![Capture d’écran 2026-07-06 à 16.07.39.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/Capture_decran_2026-07-06_a_16.07.39.png)
+![Logique de décision multiclasse](images/Capture_decran_2026-07-06_a_16.07.39.png)
 
-![Capture d’écran 2026-07-06 à 16.08.22.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/Capture_decran_2026-07-06_a_16.08.22.png)
+![Sélection du meilleur score de confiance](images/Capture_decran_2026-07-06_a_16.08.22.png)
 
-![photo_detection_1.png](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/photo_detection_1.png)
+![Rendu en direct de la détection sur le flux vidéo de l'OpenMV](images/photo_detection_1.png)
 
 ## 3.2 Le script complet à embarquer
 
@@ -478,6 +478,6 @@ En suivant cette logique, vous pouvez théoriquement ajouter des dizaines de com
 
 Vous êtes prêts à vous amuser avec votre robot parfaitement fonctionnel !
 
-![IMG_4129.HEIC](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/IMG_4129.heic)
+![Robot 4x4 STeaMi en fonctionnement](images/IMG_4129.heic)
 
-![IMG_4241.HEIC](Guide%20de%20d%C3%A9ploiement%20IA%20sur%20N6Cam%20OpenMV%20&%20Robot%20S/IMG_4241.heic)
+![Robot 4x4 STeaMi allumant ses LEDs suite à une détection](images/IMG_4241.heic)
