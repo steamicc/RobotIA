@@ -478,6 +478,6 @@ En suivant cette logique, vous pouvez théoriquement ajouter des dizaines de com
 
 Vous êtes prêts à vous amuser avec votre robot parfaitement fonctionnel !
 
-![Robot 4x4 STeaMi en fonctionnement](images/IMG_4129.heic)
+![Robot 4x4 STeaMi en fonctionnement](images/IMG_4129.jpeg)
 
-![Robot 4x4 STeaMi allumant ses LEDs suite à une détection](images/IMG_4241.heic)
+![Robot 4x4 STeaMi allumant ses LEDs suite à une détection](images/IMG_4241.jpeg)
