@@ -21,7 +21,7 @@ Pour reproduire ce projet, vous aurez besoin de :
 Ce dépôt est structuré pour une prise en main rapide et une séparation claire entre le code, l'IA et la documentation :
 
 *  **[docs/](./docs/)** : Contient le guide complet de déploiement technique et les ressources pédagogiques annexes. **C'est le dossier à consulter en priorité pour reproduire ou animer le projet.**
-* 📁 **[src/](./src/)** :
+*  **[src/](./src/)** :
   * `openmv_camera/` : Le script `main.py` en MicroPython à flasher sur la caméra.
   * `steami_arduino/` : Le code source C++ complet (`.ino`) pour la carte STeaMi.
 *  **[models/](./models/)** :
