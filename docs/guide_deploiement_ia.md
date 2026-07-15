@@ -12,15 +12,15 @@ Afin de concevoir notre premier modèle, il est impératif d’avoir à notre di
 
 Une fois le dataset téléchargé sous forme de zip, au nom ‘archive.zip’, décompresser le fichier et l’ouvrir pour en dévoiler l’intérieur :
 
-![Dossier archive.zip décompressé du dataset GTSRB](images/imA)
+![Dossier archive.zip décompressé du dataset GTSRB](images/imA.png)
 
 Dans le dossier “Meta” se trouvent les différents panneaux et leur numérotation dans cette database, par exemple le panneau numéroté 1 est celui de la signalisation d’une vitesse limitée à 30 km/h, le panneau stop est le numéro 14, etc. 
 
-![Contenu du dossier Meta avec la numérotation des panneaux](images/imB)
+![Contenu du dossier Meta avec la numérotation des panneaux](images/imB.png)
 
 Le dossier « Train », quant à lui, contient toutes les images qui serviront à entrainer le modèle. Celles-ci sont rangées par id des panneaux (comme énoncé précédemment, le numéro 14 pour le panneau stop par exemple). C’est ce dossier qui va nous servir pour concevoir notre dataset et entraîner notre modèle. 
 
-!![Contenu du dossier Train classé par ID de panneaux](images/imC)
+!![Contenu du dossier Train classé par ID de panneaux](images/imC.png)
 
 Enfin, le dossier ‘Test’ ne nous servira pas ici, mais il peut être utile dans d’autres contextes pour avoir un dataset pour la phase de test du modèle, pour tirer des conclusions sur son fonctionnement. 
 
@@ -40,19 +40,19 @@ Quelques exemples ci-dessous (une photo sombre, une de près, une penchée) :
 
 Après avoir créé un compte sur : https://roboflow.com/ Aller dans l’onglet dédié aux projets, puis cliquer sur new project (ou + Project).
 
-![Création d'un nouveau projet sur l'interface Roboflow](images/imD)
+![Création d'un nouveau projet sur l'interface Roboflow](images/imD.png)
 
 La page suivante s’ouvrira, dans laquelle, sous la partie “Project Type”, sélectionnez Object Detection, puis appuyez sur create public project. 
 
-![Sélection du type de projet Object Detection sur Roboflow](images/imE)
+![Sélection du type de projet Object Detection sur Roboflow](images/imE.png)
 
-![Paramétrage final de la création du projet Roboflow](images/imF)
+![Paramétrage final de la création du projet Roboflow](images/imF.png)
 
 Importez toutes les images qui nous intéressent (environ 300 images du dataset GTSRB par type de panneau + vos images "faites maison"), puis cliquez sur **Save and continue**. À la question *How do you want to label your images*, sélectionnez **Label Myself**. (L'option d'auto-étiquetage existe, mais l'annotation manuelle reste la plus fiable pour démarrer). Sur la page suivante, il faudra donc annoter à la main chacune des images, c’est-à-dire dessiner un carré autour du panneau, et indiquer sa classe. “Save” puis répéter pour chacun des panneaux.
 
-![Interface d'annotation manuelle avec Bounding Box sur Roboflow](images/imG)
+![Interface d'annotation manuelle avec Bounding Box sur Roboflow](images/imG.png)
 
-![Aperçu d'une image correctement annotée sur Roboflow](images/imH)
+![Aperçu d'une image correctement annotée sur Roboflow](images/imH.png)
 
 Cliquez ensuite sur **Download Dataset**, sélectionnez le format **YOLOv8** et choisissez l'option **Show download code**. Copiez ce code de téléchargement, nous en aurons besoin pour l'étape suivante.
 
@@ -139,7 +139,7 @@ La solution consiste à utiliser la mémoire morte de la caméra (ROMFS) et la t
 → Une fenêtre s’ouvre : cliquez sur Ajouter un fichier (deuxième bouton en partant de la gauche en bas de la page) et sélectionnez le fichier network_hybride.tflite de l'étape 1 (vous remarquez que se trouve sur cette page tous les modèles exemples crées par l’entreprise)
 → Enfin, cliquez sur “Commettre” (ou Commit le bouton bleu). C’est cette action qui grave physiquement le modèle dans la mémoire Flash de la caméra. 
 
-![Bouton pour commettre le fichier tflite dans la ROMFS d'OpenMV IDE](images/imI)
+![Bouton pour commettre le fichier tflite dans la ROMFS d'OpenMV IDE](images/imI.png)
 
 # Étape 3 : Programmation et test de la caméra (MicroPython)
 
