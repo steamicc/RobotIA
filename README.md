@@ -28,10 +28,10 @@ Ce dépôt est structuré pour une prise en main rapide et une séparation clair
   * Le modèle `.tflite` (Quantification hybride : Entrée INT8 / Sortie FLOAT32) prêt à être déployé.
   * Le Notebook Google Colab (`yolov8_training.ipynb`) pour ré-entraîner ou adapter l'IA avec de nouveaux panneaux.
 
-##  Démarrage Rapide (Quick Start)
-1. Téléchargez le fichier `network_hybride.tflite` situé dans le dossier `models/`.
+## Démarrage Rapide (Quick Start)
+1. Téléchargez le fichier [`network_hybride.tflite`](./models/network_hybride.tflite) situé dans le dossier [`models/`](./models/).
 2. Flashez ce fichier dans la mémoire **ROMFS** de la caméra via OpenMV IDE.
-3. Déposez le fichier `main.py` (issu du dossier `src/openmv_camera/`) sur la caméra.
-4. Téléversez le code Arduino (issu du dossier `src/steami_arduino/`) sur le robot STeaMi.
+3. Déposez le fichier [`main.py`](./src/openmv_camera/main.py) (issu du dossier [`src/openmv_camera/`](./src/openmv_camera/)) sur la caméra.
+4. Téléversez le code Arduino (issu du dossier [`src/steami_arduino/`](./src/steami_arduino/)) sur le robot STeaMi.
 5. Connectez la broche `P4` et le `GND` de la caméra au port Jacdac du robot.
 6. Allumez le robot et placez un panneau devant la caméra !
