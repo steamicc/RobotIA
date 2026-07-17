@@ -108,6 +108,7 @@ Maintenant que nous comprenons le fonctionnement général, il faut savoir que c
 Tout au long du projet, au fil des conceptions des modèles et des tests il a été découvert que la N6Cam gérait mal certaines fonctions mathématiques natives au YOLOv8 telles que SiLU ou encore depthToSpace, qui nécessitent alors d’être déléguées au CPU, ce qui provoquait des goulots d’étranglement qui faisaient crash le processus, ou donnaient de très mauvaises performances (1 à 2 fps). Il a donc fallut écraser cette fonction SiLU en passant par une fonction ReLU plus classique que le N6 sait gérer parfaitement. De plus l'entraînement est bridé à une taille d'image de `imgsz=192`. Cela correspond exactement à la fenêtre matérielle que la caméra capture, permettant de garder des FPS élevés tout en économisant la RAM. Enfin, la Quantification Hybride : Le modèle est converti en format TensorFlow Lite (`.tflite`). Pour dialoguer parfaitement avec l'écosystème OpenMV, le code force les *entrées* du modèle en nombres entiers (`tf.int8`) pour exploiter la vitesse pure du NPU, et les *sorties* en nombres à virgule (`tf.float32`) pour que la caméra puisse afficher les boîtes de détection sans crasher.
 
 ### 1.2.3 Comment utiliser le notebook ?
+ATTENTION, À CAUSE DES MISE À JOUR RÉCURRENTES DE GOOGLE COLAB LE NOTEBOOK POURRAIT NE PLUS FONCTIONNER AU MOMENT DE L'UTILISATION DE CELUI-CI.
 
 Même si ce code effectue des opérations complexes, il est conçu pour être utilisé de manière presque automatique.
 
