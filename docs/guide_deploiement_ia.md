@@ -133,6 +133,7 @@ La solution consiste à utiliser la mémoire morte de la caméra (ROMFS) et la t
 
 ### 2.2.1 Comment faire cela ?
 
+(cette étape peut nécessiter d'installer ST EDGE AI 4.0.0)
 → Installez OpenMV IDE https://openmv.io/pages/download puis lancez l’application. (Ce tutoriel a été conçu sous OpenMV IDE 4.8.11)
 → Commencez par vous assurer que la caméra est à jour en la branchant via le câble USB et en allant dans Outils > Installer la dernière version de développement.
 → Une fois cela fait, allez dans Outils > Système de fichier ROM > Modifier les romfs sur une came OpenMV.
