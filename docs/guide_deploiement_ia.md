@@ -136,8 +136,8 @@ La solution consiste à utiliser la mémoire morte de la caméra (ROMFS) et la t
 → Installez OpenMV IDE https://openmv.io/pages/download puis lancez l’application. (Ce tutoriel a été conçu sous OpenMV IDE 4.8.11)
 → Commencez par vous assurer que la caméra est à jour en la branchant via le câble USB et en allant dans Outils > Installer la dernière version de développement.
 → Une fois cela fait, allez dans Outils > Système de fichier ROM > Modifier les romfs sur une came OpenMV.
-→ Une fenêtre s’ouvre : cliquez sur Ajouter un fichier (deuxième bouton en partant de la gauche en bas de la page) et sélectionnez le fichier network_hybride.tflite de l'étape 1 (vous remarquez que se trouve sur cette page tous les modèles exemples crées par l’entreprise)
-→ Enfin, cliquez sur “Commettre” (ou Commit le bouton bleu). C’est cette action qui grave physiquement le modèle dans la mémoire Flash de la caméra. 
+→ Une fenêtre s’ouvre : cliquez sur Ajouter un fichier (deuxième bouton en partant de la gauche en bas de la page) et sélectionnez le fichier network_hybride.tflite de l'étape 1 (vous remarquez que se trouve sur cette page tous les modèles exemples crées par l’entreprise). Pour l'optimisation, séléctionnez "Optimisation moyenne" et validez. Si vous avez récupéré le fichier "network_hybride.tflite" de ce repo, choisissez "Aucune optimisation". 
+→ Enfin, cliquez sur “Commettre” (ou Commit le bouton bleu), une page s'ouvre laissez commettre un fichier sur une came OpenMV et validez. C’est cette action qui grave physiquement le modèle dans la mémoire Flash de la caméra. 
 
 ![Bouton pour commettre le fichier tflite dans la ROMFS d'OpenMV IDE](images/imI.png)
 
