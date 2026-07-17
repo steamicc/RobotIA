@@ -1,7 +1,7 @@
 import csi
 import time
 import ml
-from machine import UART # <-- AJOUT : Import de la librairie UART
+from machine import UART 
 from ml.postprocessing.ultralytics import YoloV8
 
 # Initialisation de l'UART (Port 3 en général sur OpenMV, Baudrate: 115200)
@@ -10,7 +10,7 @@ uart = UART(3, 115200)
 
 NOM_DU_MODELE = "/rom/network_hybride.tflite"
 
-print("⏳ Initialisation de la caméra...")
+print("Initialisation de la caméra...")
 cam = csi.CSI()
 cam.reset()
 
@@ -18,7 +18,7 @@ cam.pixformat(csi.RGB565)
 cam.framesize(csi.QVGA)
 cam.window((192, 192))
 
-print("🧠 Chargement du modèle...")
+print("Chargement du modèle...")
 net = ml.Model(NOM_DU_MODELE, postprocess=YoloV8(threshold=0.83))
 
 net.labels = ["30km-h", "Interdit", "STOP"]
