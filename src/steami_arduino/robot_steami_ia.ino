@@ -78,10 +78,7 @@ HardwareSerial JacdacSerial(PB7, PB6); //déclaration du serial jacdac avec la c
 // BP Menu
 #define BP_Menu PA0
 
-// LED BLE
-#define LEDBLE PH3
-
-// LED BLE
+// LEDs STeaMi
 #define LEDR PC12   // LED RGB STeaMi Rouge
 #define LEDG PC11   // LED RGB STeaMi Verte
 #define LEDB PC10   // LED RGB STeaMi Bleue
@@ -110,13 +107,15 @@ uint8_t flagDown = false;   // Position up joystick dans le menu
 uint8_t flagUp = false;     // Position down joystick dans le menu
 uint8_t flagValid = false;  // Validation de la fonction dans le menu
 uint8_t flagAffiche = false;
-uint8_t flagBMP = false;
+volatile uint8_t flagBMP = false;     // contact bumper (modifié par interruption)
 uint8_t flagMenu = false;
-uint8_t flagArret = false;
-uint8_t flagInitBLE = false;    // Initialisation de la fonction BLE
-uint8_t flagBLEconect = false;  // BLE est connecté
-uint8_t angle = 0;              // angle de rotation servo
-uint8_t flagservo = false;      // sens de rotation servo
+volatile uint8_t flagArret = false;   // arrêt moteurs à effectuer (modifié par interruption)
+volatile uint8_t flagBPMenu = false;  // appui BP Menu à traiter (modifié par interruption)
+uint8_t flagInitBLE = false;          // Initialisation de la fonction BLE
+uint8_t flagBLEconect = false;        // BLE est connecté
+uint8_t flagLEDconnexion = false;     // LED bleue de connexion BLE à afficher
+uint8_t angle = 0;                    // angle de rotation servo
+uint8_t flagservo = false;            // sens de rotation servo
 
 const uint16_t declTimerEch = 100;  // durée déclenchement timer (en ms)
 
@@ -187,33 +186,20 @@ void TimerHandler() {
   ISR_Timer.run();
 }
 
+// Les ISR ne font que signaler l'événement : le traitement (arrêt moteurs,
+// liaison série, servo...) est effectué dans loop() par gestion_interruptions()
 void contactBMPD() {
-  stop();  //
   flagBMP = true;
   flagArret = true;
 }
 
 void contactBMPG() {
-  stop();  //
   flagBMP = true;
   flagArret = true;
 }
 
 void BPMenu() {
-  stop();
-  if (posMenu == 3) {  // si menu = sonar
-#ifdef DEBUG
-    Serial.println("Menu sonar");
-#endif
-    angle = 90;
-    servomoteur.write(angle);  // on positonne le servomoteur à 90 degrés
-    flagservo = false;
-  }
-  posMenu = 0;
-  flagMenu = true;
-  flagBMP = false;
-  flagAffiche = false;
-  flagValid = false;
+  flagBPMenu = true;
 }
 
 /* Interruptions SimpleTimer */
@@ -234,7 +220,8 @@ void setup() {
   Serial.begin(9600);
   u8g2.begin();
   JacdacSerial.setHalfDuplex(); //activation de la com via le jacdac pour dire au code attention cette com fait les deux : RX et TX
-  JacdacSerial.begin(115200); //et démarrage de la com à 115200 bauds. 
+  JacdacSerial.begin(115200); //et démarrage de la com à 115200 bauds.
+  JacdacSerial.setTimeout(10); // timeout court (10 ms) : readStringUntil() ne bloque pas la boucle sur une trame incomplète
   affsetup();
   initialisation();
   stop();
@@ -261,8 +248,10 @@ void setup() {
   flagBMP = false;
   flagMenu = false;
   flagArret = false;
+  flagBPMenu = false;
   flagInitBLE = false;
   flagBLEconect = false;
+  flagLEDconnexion = false;
   flagservo = false;
   angle = 90;
   servomoteur.attach(servomotor);  // on attache le servomoteur à sa broche
@@ -274,11 +263,38 @@ void setup() {
 // ********************* loop *************************************
 
 void loop() {
+  gestion_interruptions();
   menu();
   gestion_IA();
 }
 
 // ********************* fonctions *************************************
+
+//------- début de la fonction traitement des événements d'interruption -------
+void gestion_interruptions() {
+  if (flagArret) {  // contact bumper : arrêt des moteurs
+    flagArret = false;
+    stop();
+  }
+  if (flagBPMenu) {  // appui sur BP Menu : retour au menu principal
+    flagBPMenu = false;
+    stop();
+    if (posMenu == 3) {  // si menu = sonar
+#ifdef DEBUG
+      Serial.println("Menu sonar");
+#endif
+      angle = 90;
+      servomoteur.write(angle);  // on positonne le servomoteur à 90 degrés
+      flagservo = false;
+    }
+    posMenu = 0;
+    flagMenu = true;
+    flagBMP = false;
+    flagAffiche = false;
+    flagValid = false;
+  }
+}
+//------- fin de la fonction traitement des événements d'interruption -------
 
 //-------------- début de la fonction affichage setup : ----------------
 void affsetup() {
@@ -298,8 +314,8 @@ void affsetup() {
 void initialisation() {
   uint8_t flagInit = true;
   Wire3.begin();  // Initialisation du bus I2C
-  Wire.setSDA(I2C_INT_SDA);
-  Wire.setSCL(I2C_INT_SCL);
+  Wire.setSDA(I2C1_SDA);
+  Wire.setSCL(I2C1_SCL);
   Wire.begin();
   dev_i2c.begin();
   AccGyr.begin();
@@ -315,7 +331,7 @@ void initialisation() {
   pinMode(ENA_AVG, OUTPUT);
   pinMode(ENB_ARG, OUTPUT);
   pinMode(CO_AVD, INPUT);
-  pinMode(CO_AVD, INPUT);
+  pinMode(CO_ARD, INPUT);
   pinMode(CO_AVG, INPUT);
   pinMode(CO_ARG, INPUT);
   pinMode(LEDR, OUTPUT);
@@ -582,7 +598,7 @@ void menu() {
         BLE.poll();
         unsigned long nowMillis = millis();
         if (nowMillis - millisBLE > 4000) {  // tempo connexion BLE 4s
-          if (flagBLEconect) digitalWrite(LEDB, HIGH);
+          if (flagBLEconect && flagLEDconnexion) digitalWrite(LEDB, HIGH);
         }
       }
       if (flagMenu) flagAffiche = false;
@@ -1219,6 +1235,7 @@ void blePeripheralConnectHandler(BLEDevice central) {
   digitalWrite(LEDBLE, HIGH);
   millisBLE = millis();
   flagBLEconect = true;
+  flagLEDconnexion = true;
   u8g2.clearBuffer();
   u8g2.setFontMode(1);
   u8g2.setDrawColor(1);  // couleur textes blancs
@@ -1237,6 +1254,7 @@ void blePeripheralDisconnectHandler(BLEDevice central) {
   digitalWrite(LEDBLE, LOW);
   digitalWrite(LEDB, LOW);
   flagBLEconect = false;
+  flagLEDconnexion = false;
   u8g2.clearBuffer();
   u8g2.setFontMode(1);
   u8g2.setDrawColor(1);  // couleur textes blancs
@@ -1253,35 +1271,32 @@ void blePeripheralDisconnectHandler(BLEDevice central) {
 
 void rxCharacteristicWritten(BLEDevice central, BLECharacteristic characteristic) {
   // central wrote new value to characteristic
-  uint8_t i = 0;
-  String rec1 = "";
-  String rec2 = "";
+  // trame attendue : "[canal:]valeur1,valeur2,"
+  int debut = 0;
   char canal = '0';
 #ifdef DEBUG
   Serial.print("Characteristic event, written :   ");
 #endif
   String reception = rxCharacteristic.value();
-  if (reception[1] == ':') {
+  if (reception.length() >= 2 && reception[1] == ':') {
 #ifdef DEBUG
     Serial.print("canal : ");
     Serial.print(reception[0]);
     Serial.print("  |   ");
 #endif
     canal = reception[0];
-    i = 2;
+    debut = 2;
   }
-  char x = reception[i];
-  while (x != ',') {
-    x = reception[i];
-    rec1 += x;
-    i++;
+  int virgule1 = reception.indexOf(',', debut);
+  int virgule2 = (virgule1 < 0) ? -1 : reception.indexOf(',', virgule1 + 1);
+  if (virgule2 < 0) {  // trame malformée (séparateur manquant) : ignorée
+#ifdef DEBUG
+    Serial.println("trame invalide");
+#endif
+    return;
   }
-  x = reception[i];
-  while (x != ',') {
-    x = reception[i];
-    rec2 += x;
-    i++;
-  }
+  String rec1 = reception.substring(debut, virgule1 + 1);         // valeur 1 (avec la virgule)
+  String rec2 = reception.substring(virgule1 + 1, virgule2 + 1);  // valeur 2 (avec la virgule)
   int valrec2 = rec2.toInt();  // conversion de la chaîne de carctres en entier
   int valrec1 = rec1.toInt();
   int valrec = abs(valrec2);  // valeur absolue
@@ -1300,7 +1315,7 @@ void rxCharacteristicWritten(BLEDevice central, BLECharacteristic characteristic
     digitalWrite(LEDR, LOW);
     digitalWrite(LEDG, LOW);
     digitalWrite(LEDB, LOW);
-    flagBLEconect = false;
+    flagLEDconnexion = false;
 #ifdef DEBUG
     Serial.println("  =>  LED Stop");
 #endif
@@ -1310,7 +1325,7 @@ void rxCharacteristicWritten(BLEDevice central, BLECharacteristic characteristic
       digitalWrite(LEDG, HIGH);
       digitalWrite(LEDR, LOW);
       digitalWrite(LEDB, LOW);
-      flagBLEconect = false;
+      flagLEDconnexion = false;
 #ifdef DEBUG
       Serial.println("  =>  LED Verte");
 #endif
@@ -1320,14 +1335,14 @@ void rxCharacteristicWritten(BLEDevice central, BLECharacteristic characteristic
       digitalWrite(LEDR, HIGH);
       digitalWrite(LEDG, LOW);
       digitalWrite(LEDB, LOW);
-      flagBLEconect = false;
+      flagLEDconnexion = false;
 #ifdef DEBUG
       Serial.println("  =>  LED Rouge");
 #endif
     }
     if (-valrec1 == valrec2) {  // commande gauche
       digitalWrite(LEDB, LOW);
-      flagBLEconect = false;
+      flagLEDconnexion = false;
       switch (canal) {
         case '0':
           rot_gauche(valPwm);
@@ -1348,7 +1363,7 @@ void rxCharacteristicWritten(BLEDevice central, BLECharacteristic characteristic
     }
     if (valrec1 == valrec2) {  // commande droite
       digitalWrite(LEDB, LOW);
-      flagBLEconect = false;
+      flagLEDconnexion = false;
       switch (canal) {
         case '0':
           rot_droite(valPwm);

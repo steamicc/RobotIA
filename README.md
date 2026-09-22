@@ -20,13 +20,13 @@ Pour reproduire ce projet, vous aurez besoin de :
 
 Ce dépôt est structuré pour une prise en main rapide et une séparation claire entre le code, l'IA et la documentation :
 
-*  **[docs/](./docs/)** : Contient le guide complet de déploiement technique et les ressources pédagogiques annexes. **C'est le dossier à consulter en priorité pour reproduire ou animer le projet.**
+*  **[docs/](./docs/)** : Contient le [guide complet de déploiement technique](./docs/guide_deploiement_ia.md) et les ressources pédagogiques annexes. **C'est le dossier à consulter en priorité pour reproduire ou animer le projet.**
 *  **[src/](./src/)** :
   * `openmv_camera/` : Le script `main.py` en MicroPython à flasher sur la caméra.
   * `steami_arduino/` : Le code source C++ complet (`.ino`) pour la carte STeaMi.
 *  **[models/](./models/)** :
   * Le modèle `.tflite` (Quantification hybride : Entrée INT8 / Sortie FLOAT32) prêt à être déployé.
-  * Le Notebook Google Colab (`yolov8_training.ipynb`) pour ré-entraîner ou adapter l'IA avec de nouveaux panneaux.
+  * Le Notebook Google Colab ([`YOLOv8.ipynb`](./models/YOLOv8.ipynb)) pour ré-entraîner ou adapter l'IA avec de nouveaux panneaux.
 
 ## Démarrage Rapide (Quick Start)
 1. Téléchargez le fichier [`network_hybride.tflite`](./models/network_hybride.tflite) situé dans le dossier [`models/`](./models/).
